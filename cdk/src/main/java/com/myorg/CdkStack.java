@@ -33,7 +33,6 @@ public class CdkStack extends Stack {
                 "-c",
                 "cd HealthCheck " +
                         "&& mvn clean install " +
-                        "&& ls /asset-input/HealthCheck/target/" +
                         "&& cp /asset-input/HealthCheck/target/health-checker.jar /asset-output/"
         );
 
@@ -80,7 +79,7 @@ public class CdkStack extends Stack {
                 .pipelineName("MyPipeline")
                 .synth(ShellStep.Builder.create("Synth")
                         .input(CodePipelineSource.gitHub("HieuMinh67/learn-cdk", "main"))
-                        .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "cdk synth"))
+                        .commands(Arrays.asList("npm install -g aws-cdk", "cdk synth"))
                         .build())
                 .dockerEnabledForSynth(true)
                 .build();
