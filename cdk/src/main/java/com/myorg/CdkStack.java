@@ -1,6 +1,9 @@
 package com.myorg;
 
 import software.amazon.awscdk.*;
+import software.amazon.awscdk.pipelines.CodePipeline;
+import software.amazon.awscdk.pipelines.CodePipelineSource;
+import software.amazon.awscdk.pipelines.ShellStep;
 import software.amazon.awscdk.services.apigateway.*;
 import software.amazon.awscdk.services.apigateway.IResource;
 import software.amazon.awscdk.services.lambda.Code;
@@ -67,5 +70,12 @@ public class CdkStack extends Stack {
         Integration healthIntegration = new LambdaIntegration(checkHealthFunction);
         items.addMethod("GET", healthIntegration);
 
+        CodePipeline pipeline = CodePipeline.Builder.create(this, "pipeline")
+                .pipelineName("MyPipeline")
+                .synth(ShellStep.Builder.create("Synth")
+                        .input(CodePipelineSource.gitHub("HieuMinh67/learn-cdk", "main"))
+                        .commands(Arrays.asList("npm install -g aws-cdk", "cdk synth"))
+                        .build())
+                .build();
     }
 }
