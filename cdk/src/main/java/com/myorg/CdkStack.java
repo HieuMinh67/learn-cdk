@@ -14,7 +14,10 @@ import software.amazon.awscdk.services.s3.assets.AssetOptions;
 import software.constructs.Construct;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import static java.util.Collections.singletonList;
 
 public class CdkStack extends Stack {
@@ -70,12 +73,15 @@ public class CdkStack extends Stack {
         Integration healthIntegration = new LambdaIntegration(checkHealthFunction);
         items.addMethod("GET", healthIntegration);
 
+        Map<String, String> env = new HashMap<>();
+        env.put("privileged", "true");
         CodePipeline pipeline = CodePipeline.Builder.create(this, "pipeline")
                 .pipelineName("MyPipeline")
                 .synth(ShellStep.Builder.create("Synth")
                         .input(CodePipelineSource.gitHub("HieuMinh67/learn-cdk", "main"))
                         .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "cdk synth"))
                         .build())
+                .dockerEnabledForSynth(true)
                 .build();
     }
 }
