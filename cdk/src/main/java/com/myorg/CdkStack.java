@@ -73,14 +73,14 @@ public class CdkStack extends Stack {
         Integration healthIntegration = new LambdaIntegration(checkHealthFunction);
         items.addMethod("GET", healthIntegration);
 
-        Map<String, String> env = new HashMap<>();
-        env.put("privileged", "true");
         CodePipeline pipeline = CodePipeline.Builder.create(this, "pipeline")
                 .pipelineName("MyPipeline")
                 .synth(ShellStep.Builder.create("Synth")
                         .input(CodePipelineSource.gitHub("HieuMinh67/learn-cdk", "main"))
-                        .commands(Arrays.asList("npm install -g aws-cdk", "cdk synth"))
+                        .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "cdk synth"))
+                        .primaryOutputDirectory("cdk/cdk.out")
                         .build())
+
                 .dockerEnabledForSynth(true)
                 .build();
     }
