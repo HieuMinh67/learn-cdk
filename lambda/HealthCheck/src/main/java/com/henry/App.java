@@ -19,7 +19,7 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         return new APIGatewayProxyResponseEvent()
                 .withHeaders(headers)
                 .withStatusCode(200)
-                .withBody("Good");
+                .withBody("Healthy");
     }
 
 }
